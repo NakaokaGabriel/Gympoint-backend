@@ -1,0 +1,76 @@
+import * as Yup from 'yup';
+import Students from '../models/Students';
+
+class StudentsController {
+  async store(req, res) {
+    const schema = Yup.object().shape({
+      name: Yup.string().required(),
+      email: Yup.string()
+        .email()
+        .required(),
+      age: Yup.number()
+        .required()
+        .integer(),
+      weight: Yup.number().required(),
+      height: Yup.number().required(),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Validations fails' });
+    }
+
+    const { email } = req.body;
+
+    const studentExist = await Students.findOne({ where: { email } });
+
+    if (studentExist) {
+      return res.status(400).json({ error: 'Email already exist' });
+    }
+
+    const { name, age, weight, height } = req.body;
+
+    const students = await Students.create({
+      name,
+      email,
+      age,
+      weight,
+      height,
+    });
+
+    return res.json(students);
+  }
+
+  async update(req, res) {
+    const schema = Yup.object().shape({
+      name: Yup.string(),
+      email: Yup.string().email(),
+      age: Yup.number().integer(),
+      weight: Yup.number(),
+      height: Yup.number(),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Validations failed' });
+    }
+
+    const { id } = req.query;
+
+    const students = await Students.findByPk(id);
+
+    const { email } = req.body;
+
+    if (email === students.email) {
+      const emailExist = await Students.findOne({ where: { email } });
+
+      if (emailExist) {
+        return res.status(400).json({ error: 'User already exist' });
+      }
+    }
+
+    const { name, age, weight, height } = await students.update(req.body);
+
+    return res.json({ name, email, age, weight, height });
+  }
+}
+
+export default new StudentsController();
