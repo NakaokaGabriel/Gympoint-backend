@@ -6,6 +6,8 @@ import Plans from '../models/Plans';
 import Students from '../models/Students';
 import Enrollments from '../models/Enrollments';
 
+import Mail from '../../lib/Mail';
+
 class EnrollmentController {
   async index(req, res) {
     const enrollment = await Enrollments.findAll({
@@ -52,6 +54,7 @@ class EnrollmentController {
     const { student_id, plan_id, start_date } = req.body;
 
     const plans = await Plans.findByPk(plan_id);
+    const { name, email } = await Students.findByPk(student_id);
 
     const checkStudent = await Enrollments.findOne({
       where: {
@@ -72,6 +75,12 @@ class EnrollmentController {
       start_date,
       end_date: finalDate,
       price: totalPrice,
+    });
+
+    await Mail.sendMail({
+      to: `${name} <${email}>`,
+      subject: 'Confirmação de plano',
+      text: `${name} você acabou de fazer um plano`,
     });
 
     return res.json(enrollment);
