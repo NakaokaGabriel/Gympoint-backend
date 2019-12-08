@@ -1,0 +1,14 @@
+<div style="width: 100%; background: #EE4D64;">
+  <h1 style="color: #FFF; padding: 10px 0; text-align: center;">GymPoint</h1>
+</div>
+<div style="margin-top: 10px;">
+  <strong>Olá {{ student }},</strong>
+  <p>Você acaba de fazer o cadastro do plano <strong>{{ plan }}</strong>,
+    em nossa academia. Confira os detalhes do seu cadastro abaixo:</p>
+</div>
+<div>
+  <p>Plano selecionado: {{ plan }} ({{ months }} meses).</p>
+  <p>Data de início informada: {{ start_date }}.</p>
+  <p>Data de término do plano: {{ end_date }} ({{ months }} meses depois do inicio).</p>
+  <p>Preço calculado: R${{ total_price }}.</p>
+</div>
