@@ -1,13 +1,13 @@
 import { Op } from 'sequelize';
 import * as Yup from 'yup';
-import { parseISO, addMonths, format } from 'date-fns';
-import pt from 'date-fns/locale/pt';
+import { parseISO, addMonths } from 'date-fns';
 
 import Plans from '../models/Plans';
 import Students from '../models/Students';
 import Enrollments from '../models/Enrollments';
 
-import Mail from '../../lib/Mail';
+import EnrollmentMail from '../jobs/EnrollmentMail';
+import Queue from '../../lib/Queue';
 
 class EnrollmentController {
   async index(req, res) {
@@ -78,20 +78,13 @@ class EnrollmentController {
       price: totalPrice,
     });
 
-    await Mail.sendMail({
-      to: `${name} <${email}>`,
-      subject: 'Confirmação de plano',
-      template: 'enrollment',
-      context: {
-        student: name,
-        plan: plans.title,
-        months: plans.duration,
-        start_date: format(parseISO(start_date), "dd'/'LL'/'yyyy", {
-          locale: pt,
-        }),
-        end_date: format(finalDate, "dd'/'LL'/'yyyy", { locale: pt }),
-        total_price: totalPrice,
-      },
+    await Queue.add(EnrollmentMail.key, {
+      name,
+      email,
+      plans,
+      start_date,
+      finalDate,
+      totalPrice,
     });
 
     return res.json(enrollment);
@@ -147,9 +140,9 @@ class EnrollmentController {
   async delete(req, res) {
     const { id } = req.params;
 
-    const enrollment = await Enrollments.destroy({ where: { id } });
+    await Enrollments.destroy({ where: { id } });
 
-    return res.json(enrollment);
+    return res.json({ message: 'this student managment is over' });
   }
 }
 
