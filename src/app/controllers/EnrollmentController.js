@@ -1,6 +1,7 @@
 import { Op } from 'sequelize';
 import * as Yup from 'yup';
-import { parseISO, addMonths } from 'date-fns';
+import { parseISO, addMonths, format } from 'date-fns';
+import pt from 'date-fns/locale/pt';
 
 import Plans from '../models/Plans';
 import Students from '../models/Students';
@@ -80,7 +81,17 @@ class EnrollmentController {
     await Mail.sendMail({
       to: `${name} <${email}>`,
       subject: 'Confirmação de plano',
-      text: `${name} você acabou de fazer um plano`,
+      template: 'enrollment',
+      context: {
+        student: name,
+        plan: plans.title,
+        months: plans.duration,
+        start_date: format(parseISO(start_date), "dd'/'LL'/'yyyy", {
+          locale: pt,
+        }),
+        end_date: format(finalDate, "dd'/'LL'/'yyyy", { locale: pt }),
+        total_price: totalPrice,
+      },
     });
 
     return res.json(enrollment);
