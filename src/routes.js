@@ -7,6 +7,7 @@ import StudentsController from './app/controllers/StudentsController';
 import PlansController from './app/controllers/PlansController';
 import EnrollmentController from './app/controllers/EnrollmentController';
 import CheckinController from './app/controllers/CheckinController';
+import StudentsOrdersController from './app/controllers/StudentsOrdersController';
 
 const routes = new Router();
 
@@ -30,5 +31,10 @@ routes.delete('/enrollments/:id', EnrollmentController.delete);
 
 routes.post('/students/:student_id/checkins', CheckinController.store);
 routes.get('/students/:student_id/checkins', CheckinController.index);
+
+routes.post(
+  '/students/:student_id/help-orders',
+  StudentsOrdersController.store
+);
 
 export default routes;
