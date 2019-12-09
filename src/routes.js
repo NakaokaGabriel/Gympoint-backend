@@ -29,5 +29,6 @@ routes.put('/enrollments/:id', EnrollmentController.update);
 routes.delete('/enrollments/:id', EnrollmentController.delete);
 
 routes.post('/students/:student_id/checkins', CheckinController.store);
+routes.get('/students/:student_id/checkins', CheckinController.index);
 
 export default routes;
