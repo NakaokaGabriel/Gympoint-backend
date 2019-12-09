@@ -34,6 +34,7 @@ routes.delete('/enrollments/:id', EnrollmentController.delete);
 routes.post('/students/:student_id/checkins', CheckinController.store);
 routes.get('/students/:student_id/checkins', CheckinController.index);
 
+routes.get('/students/:id/help-orders', StudentsOrdersController.index);
 routes.post(
   '/students/:student_id/help-orders',
   StudentsOrdersController.store
