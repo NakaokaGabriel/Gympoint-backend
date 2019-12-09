@@ -2,10 +2,6 @@ import * as Yup from 'yup';
 import HelpOrders from '../models/HelpOrders';
 
 class HelpOrdersController {
-  async index(req, res) {
-    return res.json({});
-  }
-
   async store(req, res) {
     const schema = Yup.object().shape({
       answer: Yup.string().required(),

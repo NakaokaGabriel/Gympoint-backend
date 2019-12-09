@@ -3,6 +3,33 @@ import Students from '../models/Students';
 import Enrollment from '../models/Enrollments';
 
 class StudentsOrdersController {
+  async index(req, res) {
+    const { id } = req.params;
+
+    if (id) {
+      const student = await Students.findByPk(id);
+
+      if (!student) {
+        return res.status(400).json({ error: 'Student not found' });
+      }
+    }
+
+    const helpOrders = await HelpOrders.findAll({
+      where: {
+        student_id: id,
+      },
+      include: [
+        {
+          model: Students,
+          as: 'student',
+          attributes: ['name', 'email'],
+        },
+      ],
+    });
+
+    return res.json(helpOrders);
+  }
+
   async store(req, res) {
     const { student_id } = req.params;
 
