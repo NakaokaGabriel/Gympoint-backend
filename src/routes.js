@@ -8,6 +8,7 @@ import PlansController from './app/controllers/PlansController';
 import EnrollmentController from './app/controllers/EnrollmentController';
 import CheckinController from './app/controllers/CheckinController';
 import StudentsOrdersController from './app/controllers/StudentsOrdersController';
+import UnansweredController from './app/controllers/UnansweredController';
 
 const routes = new Router();
 
@@ -36,5 +37,7 @@ routes.post(
   '/students/:student_id/help-orders',
   StudentsOrdersController.store
 );
+
+routes.get('/help-orders/unanswered', UnansweredController.index);
 
 export default routes;
