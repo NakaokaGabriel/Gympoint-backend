@@ -37,6 +37,33 @@ class CheckinController {
 
     return res.json({ Message: 'Checkin passed' });
   }
+
+  async index(req, res) {
+    const { student_id } = req.params;
+
+    if (student_id) {
+      const student = await Students.findByPk(student_id);
+
+      if (!student) {
+        return res.status(400).json({ error: 'Student not found' });
+      }
+    }
+
+    const checkin = await Checkins.findAll({
+      where: {
+        student_id,
+      },
+      include: [
+        {
+          model: Students,
+          as: 'student',
+          attributes: ['name', 'email'],
+        },
+      ],
+    });
+
+    return res.json(checkin);
+  }
 }
 
 export default new CheckinController();
