@@ -1,6 +1,7 @@
 import { Op } from 'sequelize';
 import * as Yup from 'yup';
-import { parseISO, addMonths } from 'date-fns';
+import { parseISO, addMonths, format } from 'date-fns';
+import pt from 'date-fns/locale/pt';
 
 import Plans from '../models/Plans';
 import Students from '../models/Students';
@@ -57,6 +58,9 @@ class EnrollmentController {
     const plans = await Plans.findByPk(plan_id);
     const { name, email } = await Students.findByPk(student_id);
 
+    const finalDate = addMonths(parseISO(start_date), plans.duration);
+    const totalPrice = plans.price * plans.duration;
+
     const checkStudent = await Enrollments.findOne({
       where: {
         student_id,
@@ -64,11 +68,16 @@ class EnrollmentController {
     });
 
     if (checkStudent) {
-      return res.status(400).json({ error: 'This student already has a plan' });
+      return res.status(400).json({
+        error: `This student already has a plan until ${format(
+          finalDate,
+          "dd'/'MM'/'yyyy",
+          {
+            locale: pt,
+          }
+        )}`,
+      });
     }
-
-    const finalDate = addMonths(parseISO(start_date), plans.duration);
-    const totalPrice = plans.price * plans.duration;
 
     const enrollment = await Enrollments.create({
       student_id,
