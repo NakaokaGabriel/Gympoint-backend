@@ -13,14 +13,7 @@ import Queue from '../../lib/Queue';
 class EnrollmentController {
   async index(req, res) {
     const enrollment = await Enrollments.findAll({
-      attributes: [
-        'id',
-        'student_id',
-        'plan_id',
-        'start_date',
-        'end_date',
-        'price',
-      ],
+      attributes: ['id', 'start_date', 'end_date', 'price'],
       include: [
         {
           model: Students,

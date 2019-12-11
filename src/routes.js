@@ -18,6 +18,7 @@ routes.post('/sessions', SessionController.store);
 // Middleware intecepts routes
 routes.use(authAuthorization);
 
+routes.get('/students?:name', StudentsController.show);
 routes.post('/students', StudentsController.store);
 routes.put('/students', StudentsController.update);
 
