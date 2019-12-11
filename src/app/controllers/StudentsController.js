@@ -1,7 +1,26 @@
+import { Op } from 'sequelize';
 import * as Yup from 'yup';
 import Students from '../models/Students';
 
 class StudentsController {
+  async show(req, res) {
+    const { name } = req.query;
+
+    const student = await Students.findAll({
+      where: {
+        name: {
+          [Op.like]: `%${name}%`,
+        },
+      },
+    });
+
+    if (student <= 0) {
+      return res.status(400).json({ error: 'Student not found' });
+    }
+
+    return res.json(student);
+  }
+
   async store(req, res) {
     const schema = Yup.object().shape({
       name: Yup.string().required(),
