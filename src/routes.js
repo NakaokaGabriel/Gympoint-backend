@@ -18,9 +18,10 @@ routes.post('/sessions', SessionController.store);
 // Middleware intecepts routes
 routes.use(authAuthorization);
 
-routes.get('/students?:name', StudentsController.show);
 routes.post('/students', StudentsController.store);
 routes.put('/students', StudentsController.update);
+routes.get('/students?:name', StudentsController.show);
+routes.delete('/students/:id', StudentsController.delete);
 
 routes.get('/plans', PlansController.index);
 routes.post('/plans', PlansController.store);
