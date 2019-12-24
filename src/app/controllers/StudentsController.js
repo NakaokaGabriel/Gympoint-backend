@@ -102,7 +102,7 @@ class StudentsController {
 
     await Students.destroy({ where: { id } });
 
-    return res.json({ 'message': 'Id was deleted' });
+    return res.json({ message: 'Id was deleted' });
   }
 }
 
