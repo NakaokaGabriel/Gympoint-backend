@@ -20,8 +20,9 @@ routes.use(authAuthorization);
 
 routes.post('/students', StudentsController.store);
 routes.put('/students', StudentsController.update);
-routes.get('/students?:name', StudentsController.show);
+routes.get('/students?:name', StudentsController.index);
 routes.delete('/students/:id', StudentsController.delete);
+routes.get('/students/:id', StudentsController.show);
 
 routes.get('/plans', PlansController.index);
 routes.post('/plans', PlansController.store);

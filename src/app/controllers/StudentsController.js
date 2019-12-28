@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 import Students from '../models/Students';
 
 class StudentsController {
-  async show(req, res) {
+  async index(req, res) {
     const { name } = req.query;
 
     const student = await Students.findAll({
@@ -57,6 +57,18 @@ class StudentsController {
     });
 
     return res.json(students);
+  }
+
+  async show(req, res) {
+    const { id } = req.params;
+
+    const student = await Students.findByPk(id);
+
+    if (!student) {
+      return res.status(400).json({ error: 'Student does not exist' });
+    }
+
+    return res.json(student);
   }
 
   async update(req, res) {
