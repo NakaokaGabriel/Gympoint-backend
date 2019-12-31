@@ -1,7 +1,7 @@
 import { Op } from 'sequelize';
-import * as Yup from 'yup';
 import { parseISO, addMonths, format } from 'date-fns';
 import pt from 'date-fns/locale/pt';
+import * as Yup from 'yup';
 
 import Plans from '../models/Plans';
 import Students from '../models/Students';
@@ -49,7 +49,16 @@ class EnrollmentController {
     const { student_id, plan_id, start_date } = req.body;
 
     const plans = await Plans.findByPk(plan_id);
-    const { name, email } = await Students.findByPk(student_id);
+
+    if (!plans) {
+      return res.status(400).json({ error: 'Plans does not exist' });
+    }
+
+    const students = await Students.findByPk(student_id);
+
+    if (!students) {
+      return res.status(400).json({ error: 'Student does not exist' });
+    }
 
     const finalDate = addMonths(parseISO(start_date), plans.duration);
     const totalPrice = plans.price * plans.duration;
@@ -81,8 +90,8 @@ class EnrollmentController {
     });
 
     await Queue.add(EnrollmentMail.key, {
-      name,
-      email,
+      name: students.name,
+      email: students.email,
       plans,
       start_date,
       finalDate,
