@@ -19,7 +19,7 @@ routes.post('/sessions', SessionController.store);
 routes.use(authAuthorization);
 
 routes.post('/students', StudentsController.store);
-routes.put('/students', StudentsController.update);
+routes.put('/students/:id', StudentsController.update);
 routes.get('/students?:name', StudentsController.index);
 routes.delete('/students/:id', StudentsController.delete);
 routes.get('/students/:id', StudentsController.show);
