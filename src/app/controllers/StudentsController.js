@@ -84,18 +84,23 @@ class StudentsController {
       return res.status(400).json({ error: 'Validations failed' });
     }
 
-    const { id } = req.query;
+    const { id } = req.params;
 
     const students = await Students.findByPk(id);
 
     const { email } = req.body;
 
-    if (email === students.email) {
-      const emailExist = await Students.findOne({ where: { email } });
+    const emailExist = await Students.findOne({
+      where: {
+        email,
+        id: {
+          [Op.ne]: id,
+        },
+      },
+    });
 
-      if (emailExist) {
-        return res.status(400).json({ error: 'User already exist' });
-      }
+    if (emailExist) {
+      return res.status(400).json({ error: 'Email already exist' });
     }
 
     const { name, age, weight, height } = await students.update(req.body);
