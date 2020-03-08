@@ -31,6 +31,36 @@ class EnrollmentController {
     return res.json(enrollment);
   }
 
+  async show(req, res) {
+    const { id } = req.params;
+
+    const userExist = await Enrollments.findByPk(id);
+
+    if (!userExist) {
+      return res.status(400).json({ error: 'Enrollment does not exist' });
+    }
+
+    const enrollment = await Enrollments.findOne({
+      where: {
+        id,
+      },
+      include: [
+        {
+          model: Students,
+          as: 'student',
+          attributes: ['id', 'name'],
+        },
+        {
+          model: Plans,
+          as: 'plan',
+          attributes: ['id', 'title', 'duration', 'price'],
+        },
+      ],
+    });
+
+    return res.json(enrollment);
+  }
+
   async store(req, res) {
     const schema = Yup.object().shape({
       student_id: Yup.number()
