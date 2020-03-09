@@ -8,6 +8,24 @@ class PlansController {
     return res.json(plan);
   }
 
+  async show(req, res) {
+    const { id } = req.params;
+
+    const planExist = await Plans.findByPk(id);
+
+    if (!planExist) {
+      return res.status(400).json({ error: 'This does not exists' });
+    }
+
+    const plan = await Plans.findOne({
+      where: {
+        id,
+      },
+    });
+
+    return res.json(plan);
+  }
+
   async store(req, res) {
     const schema = Yup.object().shape({
       title: Yup.string().required(),
