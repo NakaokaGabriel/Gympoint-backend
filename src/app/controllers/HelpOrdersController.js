@@ -7,6 +7,20 @@ import HelpOrdersMail from '../jobs/HelpOrdersMail';
 import Queue from '../../lib/Queue';
 
 class HelpOrdersController {
+  async index(req, res) {
+    const helpOrders = await HelpOrders.findAll({
+      include: [
+        {
+          model: Students,
+          as: 'student',
+          attributes: ['id', 'name', 'email'],
+        },
+      ],
+    });
+
+    return res.json(helpOrders);
+  }
+
   async store(req, res) {
     const schema = Yup.object().shape({
       answer: Yup.string().required(),

@@ -45,6 +45,7 @@ routes.post(
   StudentsOrdersController.store
 );
 
+routes.get('/help-orders', HelpOrdersController.index);
 routes.post('/help-orders/:id/answer', HelpOrdersController.store);
 
 routes.get('/help-orders/unanswered', UnansweredController.index);
