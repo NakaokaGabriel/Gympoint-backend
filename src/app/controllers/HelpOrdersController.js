@@ -7,6 +7,24 @@ import HelpOrdersMail from '../jobs/HelpOrdersMail';
 import Queue from '../../lib/Queue';
 
 class HelpOrdersController {
+  async show(req, res) {
+    const { id } = req.params;
+
+    const helpOrdersExist = await HelpOrders.findByPk(id);
+
+    if (!helpOrdersExist) {
+      return res.status(400).json({ error: 'Help order does not exist' });
+    }
+
+    const helpOrder = await HelpOrders.findOne({
+      where: {
+        id,
+      },
+    });
+
+    return res.json(helpOrder);
+  }
+
   async index(req, res) {
     const helpOrders = await HelpOrders.findAll({
       include: [
