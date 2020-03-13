@@ -46,6 +46,7 @@ routes.post(
 );
 
 routes.get('/help-orders', HelpOrdersController.index);
+routes.get('/help-orders/:id', HelpOrdersController.show);
 routes.post('/help-orders/:id/answer', HelpOrdersController.store);
 
 routes.get('/help-orders/unanswered', UnansweredController.index);
