@@ -73,16 +73,6 @@ class PlansController {
 
     const { title, duration, price } = req.body;
 
-    const titleCheck = await Plans.findOne({
-      where: {
-        title,
-      },
-    });
-
-    if (titleCheck) {
-      return res.status(400).json({ error: 'Title already exist' });
-    }
-
     const data = await plan.update({ title, duration, price });
 
     return res.json(data);
