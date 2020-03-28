@@ -147,6 +147,12 @@ class EnrollmentController {
 
     const { plan_id, start_date } = req.body;
 
+    const planExist = await Plans.findByPk(plan_id);
+
+    if (!planExist) {
+      return res.status(400).json({ error: 'Plan does not exist' });
+    }
+
     const checkPlan = await Enrollments.findOne({
       where: {
         id: dataEnrollment.id,
