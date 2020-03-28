@@ -151,12 +151,12 @@ class EnrollmentController {
       where: {
         id: dataEnrollment.id,
         plan_id: {
-          [Op.gt]: plan_id,
+          [Op.ne]: plan_id,
         },
       },
     });
 
-    if (checkPlan) {
+    if (!checkPlan) {
       return res.status(401).json({
         error: 'Plan cannot be upgraded',
       });
