@@ -45,10 +45,10 @@ routes.post(
   StudentsOrdersController.store
 );
 
+routes.get('/help-orders/unanswered', UnansweredController.index);
+
 routes.get('/help-orders', HelpOrdersController.index);
 routes.get('/help-orders/:id', HelpOrdersController.show);
 routes.post('/help-orders/:id/answer', HelpOrdersController.store);
-
-routes.get('/help-orders/unanswered', UnansweredController.index);
 
 export default routes;
